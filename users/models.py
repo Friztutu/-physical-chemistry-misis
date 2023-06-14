@@ -7,8 +7,8 @@ class CustomUser(AbstractUser):
     TEACHER = 0
     STUDENT = 1
     STATUSES = (
-        TEACHER, 'Препод ебать',
-        STUDENT, 'Попуск ебанные',
+        (TEACHER, 'Препод ебать'),
+        (STUDENT, 'Попуск ебанные'),
     )
     group = models.CharField(max_length=32)
     status = models.PositiveSmallIntegerField(default=STUDENT, choices=STATUSES)
