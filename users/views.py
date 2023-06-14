@@ -10,3 +10,7 @@ class ProfileView(TemplateView):
 
 class LoginView(TemplateView):
     template_name = 'users/login.html'
+
+
+class RegistrationView(TemplateView):
+    template_name = 'users/registration.html'

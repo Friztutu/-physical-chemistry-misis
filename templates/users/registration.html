@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    <title>Регистрация</title>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container mt-5 p-5">
+        <h1 style="text-align: center;" class="mt-5">Регистрация</h1>
+        <div class="input-group mt-5">
+          <span class="input-group-text">Имя и фамилия</span>
+          <input type="text" aria-label="First name" class="form-control" placeholder="First name">
+          <input type="text" aria-label="Last name" class="form-control" placeholder="Last name">
+        </div>
+        <div class="input-group mt-5">
+          <span class="input-group-text">Группа</span>
+          <input type="text" aria-label="First name" class="form-control" placeholder="Group">
+        </div>
+      <div class="input-group mt-5">
+          <span class="input-group-text">Почта</span>
+          <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="m2108147@edu.misis.ru">
+        </div>
+      <div class="input-group mt-5">
+          <span class="input-group-text">Пароль / Потверждения пароля</span>
+          <input type="password" aria-label="password" class="form-control" placeholder="Password">
+          <input type="password" aria-label="password" class="form-control" placeholder="Confirm password">
+        </div>
+      <button type="button" class="btn btn-success mt-5" style="text-align: center;">Войти</button>
+    </div>
+{% endblock %}
