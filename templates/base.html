@@ -12,7 +12,7 @@
   <body>
     <nav class="navbar bg-body-tertiary fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'main:index' %}">
           <img src='{% static "/img/misis.jpg" %}' alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
           ПИСОС
           </a>
@@ -29,9 +29,18 @@
           </div>
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Профиль</a>
-              </li>
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">Профиль</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a href="{% url 'users:login' %}" class="nav-link">Войти</a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'users:login' %}" class="nav-link">Зарегистрироваться</a>
+                </li>
+              {% endif %}
               <li class="nav-item">
                 <a class="nav-link" href="#">История расчетов</a>
               </li>
@@ -40,7 +49,7 @@
                   Расчеты
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Идз1</a></li>
+                  <li><a class="dropdown-item" href="{% url 'main:task1' %}">Идз1</a></li>
                   <li><a class="dropdown-item" href="#">Идз2</a></li>
                   <li><a class="dropdown-item" href="#">Идз3</a></li>
                 </ul>
@@ -48,9 +57,11 @@
               <li>
                 <hr>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Выйти</a>
-              </li>
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Выйти</a>
+                </li>
+              {% endif %}
             </ul>
           </div>
         </div>
