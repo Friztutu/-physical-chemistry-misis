@@ -7,8 +7,8 @@ class CustomUser(AbstractUser):
     TEACHER = 0
     STUDENT = 1
     STATUSES = (
-        (TEACHER, 'Препод ебать'),
-        (STUDENT, 'Попуск ебанные'),
+        (TEACHER, 'Преподаватель'),
+        (STUDENT, 'Студент'),
     )
 
     email = models.EmailField(unique=True)

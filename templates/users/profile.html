@@ -27,6 +27,7 @@
                 <span class="input-group-text">Email</span>
                 {{ form.email }}
               </div>
+              <p style="text-align: center; font-size: 1.5em;" class="mt-5"> Статус: {{ user.get_status_display }}</p>
               <div class="container-fluid" style="text-align:center;">
                 <button type="submit" class="btn btn-success mt-5">Сохранить</button>
             </div>
