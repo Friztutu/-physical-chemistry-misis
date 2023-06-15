@@ -15,3 +15,7 @@ class CustomUser(AbstractUser):
     group = models.CharField(max_length=32)
     status = models.PositiveSmallIntegerField(default=STUDENT, choices=STATUSES)
     student_id = models.PositiveIntegerField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
