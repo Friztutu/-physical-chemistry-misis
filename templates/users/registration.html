@@ -26,14 +26,6 @@
               {{ form.first_name }}
               {{ form.last_name }}
             </div>
-            <div class="input-group mt-5">
-                <span class="input-group-text">Группа</span>
-                <select id="inputState" class="form-select">
-                  {% for group in groups %}
-                    <option>{{ group.name }}</option>
-                  {% endfor %}
-                </select>
-              </div>
           <div class="input-group mt-5">
               <span class="input-group-text">Почта</span>
               {{ form.email }}

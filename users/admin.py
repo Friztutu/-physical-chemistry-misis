@@ -26,4 +26,3 @@ class CustomUserAdmin(admin.ModelAdmin):
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name', )
     fields = ('name', )
-    
