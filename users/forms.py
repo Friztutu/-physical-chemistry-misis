@@ -5,12 +5,12 @@ from users.models import CustomUser
 
 
 class UserLoginForm(AuthenticationForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'password')
+        fields = ('username', 'password')
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -18,12 +18,13 @@ class UserRegistrationForm(UserCreationForm):
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}))
     group = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Group'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'm2108147@edu.misis.ru'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm password'}))
 
     class Meta:
         model = CustomUser
-        fields = ('first_name', 'last_name', 'group', 'email', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'group', 'email', 'username', 'password1', 'password2')
 
 
 class UserProfileForm(UserChangeForm):

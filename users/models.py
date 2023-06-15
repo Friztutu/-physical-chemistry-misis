@@ -10,6 +10,8 @@ class CustomUser(AbstractUser):
         (TEACHER, 'Препод ебать'),
         (STUDENT, 'Попуск ебанные'),
     )
+
+    email = models.EmailField(unique=True)
     group = models.CharField(max_length=32)
     status = models.PositiveSmallIntegerField(default=STUDENT, choices=STATUSES)
     student_id = models.PositiveIntegerField(blank=True, null=True)

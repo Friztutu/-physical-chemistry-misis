@@ -12,20 +12,25 @@
         <div class="col mt-5">
           <div class="container">
             <h1>Профиль</h1>
-            <div class="input-group mt-5">
-              <span class="input-group-text">First and last name</span>
-              <input type="text" aria-label="First name" class="form-control">
-              <input type="text" aria-label="Last name" class="form-control">
+            <form action="{% url 'users:profile' user.id %}" method="post">
+              {% csrf_token %}
+              <div class="input-group mt-5">
+                <span class="input-group-text">First and last name</span>
+                {{ form.first_name }}
+                {{ form.last_name }}
+              </div>
+              <div class="input-group mt-5">
+                <span class="input-group-text">Group</span>
+                {{ form.group }}
+              </div>
+              <div class="input-group mt-5">
+                <span class="input-group-text">Email</span>
+                {{ form.email }}
+              </div>
+              <div class="container-fluid" style="text-align:center;">
+                <button type="submit" class="btn btn-success mt-5">Сохранить</button>
             </div>
-            <div class="input-group mt-5">
-              <span class="input-group-text">Group</span>
-              <input type="text" aria-label="First name" class="form-control">
-            </div>
-            <div class="input-group mt-5">
-              <span class="input-group-text">Email</span>
-              <input type="text" aria-label="First name" class="form-control">
-            </div>
-            <button type="button" class="btn btn-primary mt-5">Сохранить</button>
+          </form>
           </div>
         </div>
         <div class="col mt-5">
