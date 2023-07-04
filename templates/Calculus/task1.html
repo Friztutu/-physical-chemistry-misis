@@ -6,22 +6,29 @@
     <title>Идз №1</title>
 {% endblock %}
 
+{% block style %}
+  <link href='{% static "css/task1.css" %}' rel="stylesheet" crossorigin="anonymous">
+{% endblock %}
+
 {% block content %}
     <div class="container" style="margin-top: 10em;">
-      <p class="text">Спроектировать защитное заземление оборудования лаборатории, находящейся в
-        <input type="text" class="form-control" aria-label="First name" style="display: inline-block; width:7em;">
-        климатической зоне. Заземляющее устройство заглублено на глубину 0.8 м. Грунт –
-        <input type="text" class="form-control" aria-label="First name" style="display: inline-block; width:7em;">.
-        Для вертикальных заземлителей длиной lc = 3 м использовать стальные трубы диаметром
-        d = 40 мм. Для соединительной полосы использовать стальную шину сечением 40 х 4 мм.
-        Заземлители расположить
-        <input type="text" class="form-control" aria-label="First name" style="display: inline-block; width:7em;">.
-        Источник тока (трансформатор) мощностью
-        <input type="text" class="form-control" aria-label="First name" style="display: inline-block; width:7em;"> кВ·А подает
-        напряжение в лабораторию 400 В.
-      </p>
-      <div class="container text-center" style="margin-top: 3em;">
-        <button type="button" class="btn btn-primary">Рассчитать</button>
-      </div>
+      <form action="{% url 'main:task1' %}" method="post">
+        {% csrf_token %}
+        <p class="text">Спроектировать защитное заземление оборудования лаборатории, находящейся в
+          {{ form.climate_zone }}
+          климатической зоне. Заземляющее устройство заглублено на глубину 0.8 м. Грунт –
+          {{ form.soil }}.
+          Для вертикальных заземлителей длиной lc = 3 м использовать стальные трубы диаметром
+          d = 40 мм. Для соединительной полосы использовать стальную шину сечением 40 х 4 мм.
+          Заземлители расположить
+          {{ form.scheme }}.
+          Источник тока (трансформатор) мощностью
+          {{ form.power }} кВ·А подает
+          напряжение в лабораторию 400 В.
+        </p>
+        <div class="container text-center" style="margin-top: 3em;">
+          <button type="submit" class="btn btn-primary">Рассчитать</button>
+        </div>
+      </form>
     </div>
 {% endblock %}
