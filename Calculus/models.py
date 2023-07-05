@@ -26,10 +26,10 @@ class Task1(models.Model):
     )
 
     ZONES = (
-        (FIRST_ZONE, 'первая зона'),
-        (SECOND_ZONE, 'вторая зона'),
-        (THIRD_ZONE, 'третья зона'),
-        (FOURTH_ZONE, 'четвертая зона'),
+        (FIRST_ZONE, 'первой'),
+        (SECOND_ZONE, 'второй'),
+        (THIRD_ZONE, 'третьей'),
+        (FOURTH_ZONE, 'четвертой'),
     )
 
     SOILS = (
@@ -48,6 +48,7 @@ class Task1(models.Model):
 
 
 class ResultTask1(models.Model):
+    task = models.ForeignKey(to=Task1, on_delete=models.CASCADE)
     diameter = models.FloatField()
     vertical_length = models.FloatField()
     num_accurate = models.FloatField()

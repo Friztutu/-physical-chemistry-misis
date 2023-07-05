@@ -15,6 +15,6 @@ class IndexView(TemplateView):
 class Task1View(CreateView):
     template_name = 'Calculus/task1.html'
     model = Task1
-    success_url = reverse_lazy('main:index')
+    success_url = reverse_lazy('main:result1')
     form_class = Task1Form
 

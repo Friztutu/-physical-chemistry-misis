@@ -9,8 +9,11 @@
 {% block content %}
     <div class="container">
         <p>
-            Резуьтаты:
-                что-то
+            Параметры заземляющего устройства: вертикальные элементы – трубы, диаметром
+            {{ form.diameter }} мм и {{ form.vertical_length }} по 3 м, в количестве {{ form.num_accurate }} шт. расположены {{ form.scheme }}. Расстояние между
+            вертикальными элементами – {{ form.distance_between }}. Горизонтальный элемент – полоса, сечением {{ form.section }}х4 мм,
+            длиной {{ form.length }} м. Заземляющее устройство заглублено на глубину {{ form.depth }} м. Сопротивление
+            заземляющего устройства {{ form.total_resistance }} Ом, что не превышает нормативного значения {{ form.normative_resistance }} Ом
         </p>
     </div>
 {% endblock %}
