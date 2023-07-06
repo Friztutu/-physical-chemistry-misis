@@ -7,13 +7,13 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" style="margin-top: 10em;">
         <p>
             Параметры заземляющего устройства: вертикальные элементы – трубы, диаметром
-            {{ form.diameter }} мм и {{ form.vertical_length }} по 3 м, в количестве {{ form.num_accurate }} шт. расположены {{ form.scheme }}. Расстояние между
-            вертикальными элементами – {{ form.distance_between }}. Горизонтальный элемент – полоса, сечением {{ form.section }}х4 мм,
-            длиной {{ form.length }} м. Заземляющее устройство заглублено на глубину {{ form.depth }} м. Сопротивление
-            заземляющего устройства {{ form.total_resistance }} Ом, что не превышает нормативного значения {{ form.normative_resistance }} Ом
+            {{ result1.diameter }} мм и {{ result1.vertical_length }} по 3 м, в количестве {{ result1.num_accurate }} шт. расположены {{ result1.scheme }}. Расстояние между
+            вертикальными элементами – {{ result1.distance_between }}. Горизонтальный элемент – полоса, сечением {{ result1.section }}х4 мм,
+            длиной {{ result1.length }} м. Заземляющее устройство заглублено на глубину {{ result1.depth }} м. Сопротивление
+            заземляющего устройства {{ result1.total_resistance }} Ом, что не превышает нормативного значения {{ result1.normative_resistance }} Ом
         </p>
     </div>
 {% endblock %}

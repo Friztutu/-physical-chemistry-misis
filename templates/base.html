@@ -30,22 +30,10 @@
           </div>
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-              {% if user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="{% url 'users:profile' user.id %}">Профиль</a>
+                  <a class="nav-link active" aria-current="page" href="#">Справочные материалы</a>
                 </li>
-              {% else %}
-                <li class="nav-item">
-                  <a href="{% url 'users:login' %}" class="nav-link">Войти</a>
-                </li>
-                <li class="nav-item">
-                  <a href="{% url 'users:registration' %}" class="nav-link">Зарегистрироваться</a>
-                </li>
-              {% endif %}
-              <li class="nav-item">
-                <a class="nav-link" href="#">История расчетов</a>
-              </li>
-              <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Расчеты
                 </a>
@@ -58,19 +46,6 @@
               <li>
                 <hr>
               </li>
-              {%if user.is_superuser %}
-                <li class="nav-item">
-                  <a href="{% url 'admin:index' %}" class="nav-link"> Админ панель </a>
-                </li>
-                <li>
-                  <hr>
-                </li>
-              {% endif %}
-              {% if user.is_authenticated %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
-                </li>
-              {% endif %}
             </ul>
           </div>
         </div>

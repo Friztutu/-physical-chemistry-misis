@@ -11,16 +11,18 @@ import math
 
 
 # Определим нормативное значение сопротивления заземления Rн
-def main(power_db=400, soil_db='суглинок', climate_zone_db='2', scheme_db='в ряд'):
+def main(power_db=400, soil_db=4, climate_zone_db='2', scheme_db=0):
+    soils = {1: 'чернозем', 2: 'супесок', 3: 'песок', 4: 'суглинок', 5: 'глина'}
+    schemes = {0: 'в ряд', 1: 'по контуру'}
     depth = 0.8
     vertical_length = 3.0
     diameter = 40 / 1000
     width = 40 / 1000
     voltage = 400
     power = power_db
-    soil = soil_db
-    climate_zone = climate_zone_db
-    scheme = scheme_db
+    soil = soils[soil_db]
+    climate_zone = str(climate_zone_db)
+    scheme = schemes[scheme_db]
     return calculate(depth, vertical_length, diameter, width, voltage, power, soil, climate_zone, scheme)
 
 
@@ -89,6 +91,10 @@ def calculate(depth, vertical_length, diameter, width, voltage, power, soil, cli
     else:
         horiz_grounding_multipliers = {4: 0.70, 6: 0.64, 10: 0.56, 20: 0.45, 40: 0.39, 60: 0.36, 100: 0.33}
 
+    # Дополним таблицу в случае необходимости
+    if num_accurate not in horiz_grounding_multipliers:
+        horiz_grounding_multipliers[num_accurate] = find_middle_value(num_accurate, horiz_grounding_multipliers)
+
     horizontal_resistance = horizontal_resistance / horiz_grounding_multipliers[num_accurate]
 
     total_resistance = round(grounding_resistance * horizontal_resistance /
@@ -99,4 +105,4 @@ def calculate(depth, vertical_length, diameter, width, voltage, power, soil, cli
 
 
 if __name__ == '__main__':
-    print(main(400, 'суглинок', '2', 'в ряд'))
+    print(main(400, 4, '2', 0))

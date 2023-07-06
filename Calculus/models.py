@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Task1(models.Model):
-    # schemes
+    # SCHEMES
     IN_A_ROW = 0
     ALONG_THE_CONTOUR = 1
 
@@ -40,7 +40,6 @@ class Task1(models.Model):
         (CLAY, 'глина'),
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
     power = models.PositiveSmallIntegerField()
     scheme = models.PositiveSmallIntegerField(choices=SCHEMES)
     soil = models.PositiveSmallIntegerField(choices=SOILS)
