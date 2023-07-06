@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 class Task1(models.Model):
     # SCHEMES
     IN_A_ROW = 0
@@ -19,7 +18,7 @@ class Task1(models.Model):
     SAND = 3
     LOAM = 4
     CLAY = 5
-    
+
     SCHEMES = (
         (IN_A_ROW, 'в ряд'),
         (ALONG_THE_CONTOUR, 'по контуру'),
@@ -58,3 +57,48 @@ class ResultTask1(models.Model):
     depth = models.FloatField()
     total_resistance = models.FloatField()
     normative_resistance = models.FloatField()
+
+
+class Task2(models.Model):
+    # SCHEMES
+
+    STAR_STAR = 1
+    STAR_DELTA = 2
+
+    # Materials
+    AL = 1
+    CU = 2
+
+    #TYPES
+    AB = 1
+    P = 2
+
+    SCHEMES = (
+        (STAR_STAR, 'Y/Yн'),
+        (STAR_DELTA, 'Δ/Yн'),
+    )
+
+    MATERIALS = (
+        (AL, 'алюминий'),
+        (CU, 'медь')
+    )
+
+    TYPES = (
+        (AB, 'AB'),
+        (P, 'П'),
+    )
+
+    scheme = models.PositiveSmallIntegerField(choices=SCHEMES)
+    length = models.IntegerField()
+    power = models.IntegerField()
+    phase_voltage = models.IntegerField()
+    phase_square = models.IntegerField()
+    phase_material = models.PositiveSmallIntegerField(choices=MATERIALS)
+    distance_between_conductors = models.IntegerField()
+    amperage_nominal = models.IntegerField()
+    type_electro = models.PositiveSmallIntegerField(choices=TYPES)
+
+
+class ResultTask2(models.Model):
+    task = models.ForeignKey(to=Task2, on_delete=models.CASCADE)
+    square = models.FloatField()
