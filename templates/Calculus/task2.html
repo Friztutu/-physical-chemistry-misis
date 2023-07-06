@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    <title>Идз №1</title>
+{% endblock %}
+
+{% block style %}
+  <link href='{% static "css/task1.css" %}' rel="stylesheet" crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="margin-top: 10em;">
+      <form action="{% url 'main:task2' %}" method="post">
+        {% csrf_token %}
+        <p class="text">Подобрать площадь сечения нулевого провода, удовлетворяющая условию
+            срабатывания максимальной токовой защиты, распределительного щитка лаборатории, к
+            которому подведена линия (длиной l = 400 м) от понижающего трансформатора с 10 кВ до
+            0,4 кВ, мощностью 400 кВ·А, соединение обмоток Y/Yн. Параметры «фазы» -- напряжение
+            220 В, площадь сечения провода из меди 12 мм
+            2
+            . Расстояние между проводниками линии –
+            0,6 м. Параметры устройства защиты – тип АВ, номинальный ток Iном = 63 А.
+        </p>
+        <div class="container text-center" style="margin-top: 3em;">
+          <button type="submit" class="btn btn-primary">Рассчитать</button>
+        </div>
+      </form>
+    </div>
+{% endblock %}

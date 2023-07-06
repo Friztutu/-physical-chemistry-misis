@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy, reverse
 from Calculus.forms import Task1Form
-from Calculus.models import Task1, ResultTask1
+from Calculus.models import Task1, ResultTask1, Task2, ResultTask2
 
 
 # Create your views here.
@@ -31,3 +31,16 @@ class Result1View(TemplateView):
         context = super(Result1View, self).get_context_data(**kwargs)
         context['result1'] = ResultTask1.objects.get(task_id=self.kwargs.get('task_id'))
         return context
+
+
+class Task2(CreateView):
+    template_name = 'Calculus/task2.html'
+    model = Task2
+    form_class = Task2Form
+
+    def get_success_url(self):
+        last = Task2.objects.last()
+        if not last:
+            return reverse_lazy('main:result2', args=(1,))
+        else:
+            return reverse_lazy('main:result2', args=(last.id,))
