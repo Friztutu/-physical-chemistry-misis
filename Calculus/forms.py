@@ -43,7 +43,7 @@ class Task2Form(forms.ModelForm):
     phase_voltage = forms.IntegerField(min_value=1)
     phase_square = forms.IntegerField(min_value=1)
     phase_material = forms.CharField(widget=forms.Select(choices=Task2.MATERIALS))
-    distance_between_conductors = forms.IntegerField(min_value=1)
+    distance_between_conductors = forms.FloatField(min_value=0)
     amperage_nominal = forms.IntegerField(min_value=1)
     type_electro = forms.CharField(widget=forms.Select(choices=Task2.TYPES))
 

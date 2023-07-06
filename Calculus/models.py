@@ -94,7 +94,7 @@ class Task2(models.Model):
     phase_voltage = models.IntegerField()
     phase_square = models.IntegerField()
     phase_material = models.PositiveSmallIntegerField(choices=MATERIALS)
-    distance_between_conductors = models.IntegerField()
+    distance_between_conductors = models.FloatField()
     amperage_nominal = models.IntegerField()
     type_electro = models.PositiveSmallIntegerField(choices=TYPES)
 
