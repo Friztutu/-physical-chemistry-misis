@@ -3,11 +3,20 @@
 
 
 {% block title %}
-    <title>Идз №1 - результат</title>
+    <title>Результат - Задача 5.2</title>
 {% endblock %}
 
 {% block content %}
     <div class="container" style="margin-top: 10em;">
+        <p class="mb-3"><strong> Исходные данные</strong></p>
+        <p class="text">Подобрать площадь сечения нулевого провода, удовлетворяющая условию
+            срабатывания максимальной токовой защиты, распределительного щитка лаборатории, к
+            которому подведена линия (длиной l = <strong>{{ result2.task.length }}</strong>) от понижающего трансформатора с 10 кВ до
+            0,4 кВ, мощностью <strong>{{ result2.task.power }}</strong> кВ·А, соединение обмоток <strong>{{ result2.task.get_scheme_display }}</strong>. Параметры «фазы» -- напряжение
+            <strong>{{ result2.task.phase_voltage }}</strong> В, площадь сечения провода из <strong>{{ result2.task.get_phase_material_display }}</strong> <strong>{{ result2.task.phase_square }}</strong> мм2. Расстояние между проводниками линии –
+            <strong>{{ result2.task.distance_between_conductors }}</strong> м. Параметры устройства защиты – тип <strong>{{ result2.task.get_type_electro_display }}</strong>, номинальный ток Iном = <strong>{{ result2.task.amperage_nominal }}</strong> А.
+        </p>
+        <p class="mb-3"><strong>Результат</strong></p>
         <p>
             В результате расчета определена необходимая площадь сечения нулевого провода Sн = {{ result2.square }} мм 2
             , которая обеспечит срабатывание автоматического выключателя.

@@ -1,6 +1,6 @@
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, UpdateView
-from django.urls import reverse_lazy, reverse
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
 from Calculus.forms import Task1Form, Task2Form
 from Calculus.models import Task1, ResultTask1, Task2, ResultTask2
 
@@ -53,3 +53,7 @@ class Result2View(TemplateView):
         context = super(Result2View, self).get_context_data(**kwargs)
         context['result2'] = ResultTask2.objects.get(task_id=self.kwargs.get('task_id'))
         return context
+
+
+class InfoTask1View(TemplateView):
+    template_name = 'Calculus/info_task1.html'

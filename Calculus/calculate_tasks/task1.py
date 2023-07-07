@@ -36,11 +36,8 @@ def find_middle_value(quantity, grounding_multipliers):
                 quantities[current_index - 1]]) / 2
 
 
-def calculate(depth, vertical_length, diameter, width, voltage, power, soil, climate_zone, scheme):
-    if voltage < 1000:
-        normative_resistance = 4 if power < 100 else 10
-    else:
-        normative_resistance = 10 if power < 500 else 0.5
+def calculate(depth, vertical_length, diameter, width, voltage,  power, soil, climate_zone, scheme):
+    normative_resistance = 4 if power < 100 else 10
 
     soil_resistance_tabular = {"глина": 40, "суглинок": 100, "чернозем": 200,  # таблица 5.1
                                "супесок": 300, "песок": 700, "скалистый": 2000}

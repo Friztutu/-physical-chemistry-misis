@@ -62,7 +62,6 @@ def calculate(scheme, power, phase_voltage, length, phase_square, phase_material
                              300: {0.5: (1.77, 1.06), 1.0: (1.34, 0.80), 1.5: (1.08, 0.65)}}  # Таблица 5.7
 
     # Выберем площадь, входящую в найденный диапозон
-    flag = False
     for square in filter(lambda current_square: square_min <= current_square <= square_max, conductor_resistances):
         # Выберем подходящую плотность тока
         for amper_density in conductor_resistances[square]:  # iн
