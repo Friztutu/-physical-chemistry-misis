@@ -69,9 +69,15 @@ class Task2(models.Model):
     AL = 1
     CU = 2
 
-    #TYPES
+    # TYPES
     AB = 1
     P = 2
+
+    # POWERS
+    POWER_40 = 1
+    POWER_63 = 2
+    POWER_400 = 3
+    POWER_630 = 4
 
     SCHEMES = (
         (STAR_STAR, 'Y/Yн'),
@@ -88,9 +94,16 @@ class Task2(models.Model):
         (P, 'П'),
     )
 
+    POWERS = (
+        (POWER_40, 40),
+        (POWER_63, 63),
+        (POWER_400, 400),
+        (POWER_630, 630),
+    )
+
     scheme = models.PositiveSmallIntegerField(choices=SCHEMES)
     length = models.IntegerField()
-    power = models.IntegerField()
+    power = models.PositiveSmallIntegerField(choices=POWERS)
     phase_voltage = models.IntegerField()
     phase_square = models.IntegerField()
     phase_material = models.PositiveSmallIntegerField(choices=MATERIALS)

@@ -18,13 +18,14 @@ import math
 
 
 # Определим сопротивление обмоток трансформатора Zт, Ом
-def init_varibles(scheme_id, power_db, phase_voltage_db, length_db, phase_square_db, phase_material_id,
+def init_varibles(scheme_id, power_key, phase_voltage_db, length_db, phase_square_db, phase_material_id,
                   distance_between_conductors_db, amperage_nominal_db):
     scheme_dict = {1: 'звезда-звезда', 2: 'не звезда-звезда'}
     material_dict = {1: 'алюминий', 2: 'медь'}
+    powers = {1: 40, 2: 63, 3: 400, 4: 630}
 
     scheme = scheme_dict[scheme_id]
-    power = power_db
+    power = powers[power_key]
     phase_voltage = phase_voltage_db
     length = length_db
     phase_square = phase_square_db

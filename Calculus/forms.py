@@ -39,7 +39,7 @@ class Task1Form(forms.ModelForm):
 class Task2Form(forms.ModelForm):
     scheme = forms.CharField(widget=forms.Select(choices=Task2.SCHEMES))
     length = forms.IntegerField(min_value=1)
-    power = forms.IntegerField(min_value=1)
+    power = forms.IntegerField(widget=forms.Select(choices=Task2.POWERS))
     phase_voltage = forms.IntegerField(min_value=1)
     phase_square = forms.IntegerField(min_value=1)
     phase_material = forms.CharField(widget=forms.Select(choices=Task2.MATERIALS))
@@ -51,7 +51,7 @@ class Task2Form(forms.ModelForm):
         task2 = super().save(commit=True)
         square = init_varibles(
             scheme_id=task2.scheme,
-            power_db=task2.power,
+            power_key=task2.power,
             phase_voltage_db=task2.phase_voltage,
             length_db=task2.length,
             phase_square_db=task2.phase_square,

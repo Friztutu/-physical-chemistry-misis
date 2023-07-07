@@ -35,18 +35,17 @@
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="{% url 'main:info-task' %}">Справочные материалы</a>
                 </li>
+               <li>
+                  <hr>
+                </li>
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Расчеты
+                  О проекте
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'main:task1' %}">Идз1</a></li>
-                  <li><a class="dropdown-item" href="#">Идз2</a></li>
-                  <li><a class="dropdown-item" href="#">Идз3</a></li>
+                  <li><a class="dropdown-item" href="{% url 'main:about-team' %}">Команда</a></li>
+                  <li><a class="dropdown-item" href="{% url 'main:targets' %}">Цели проекта</a></li>
                 </ul>
-              </li>
-              <li>
-                <hr>
               </li>
             </ul>
           </div>

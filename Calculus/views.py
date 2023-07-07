@@ -57,3 +57,11 @@ class Result2View(TemplateView):
 
 class InfoTask1View(TemplateView):
     template_name = 'Calculus/info_task1.html'
+
+
+class AboutTeamView(TemplateView):
+    template_name = 'Calculus/about_team.html'
+
+
+class ProjectTargetsView(TemplateView):
+    template_name = 'Calculus/targets.html'
