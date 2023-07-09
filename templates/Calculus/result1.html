@@ -10,8 +10,18 @@
   <link href='{% static "css/base.css" %}' rel="stylesheet" crossorigin="anonymous">
 {% endblock %}
 
+{% block breadcrumb %}
+   <div class="container" style="margin-top: 3em;">
+      <ol class="breadcrumb text">
+        <li class="breadcrumb-item"><a href="{% url 'main:index' %}">Главная</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="{% url 'main:task1' %}">Проектировка защитного заземление</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Результат</li>
+      </ol>
+   </div>
+{% endblock %}
+
 {% block content %}
-    <div class="container" style="margin-top: 10em;">
+    <div class="container" style="margin-top: 5em;">
         <h2 class="mb-3 text-center">Цель расчета</h2>
         <p class="text text-center" style="border: solid; border-color: blue; border-width: 0.1em; padding: 2em; border-radius: 100px;"><strong>Цель расчета заземления – определить параметры заземляющего устройства: число и
             длину вертикальных элементов (стержней), длину горизонтальных элементов

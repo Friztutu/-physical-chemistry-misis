@@ -10,8 +10,17 @@
   <link href='{% static "css/base.css" %}' rel="stylesheet" crossorigin="anonymous">
 {% endblock %}
 
+{% block breadcrumb %}
+   <div class="container" style="margin-top: 3em;">
+      <ol class="breadcrumb text">
+        <li class="breadcrumb-item"><a href="{% url 'main:index' %}">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Проектировка защитного заземление</li>
+      </ol>
+   </div>
+{% endblock %}
+
 {% block content %}
-    <div class="container" style="margin-top: 10em;">
+    <div class="container" style="margin-top: 5em;">
       <form action="{% url 'main:task1' %}" method="post">
         {% csrf_token %}
         <h2 class="mb-3 text-center">Цель расчета</h2>

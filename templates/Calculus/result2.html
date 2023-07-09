@@ -10,8 +10,18 @@
   <link href='{% static "css/base.css" %}' rel="stylesheet" crossorigin="anonymous">
 {% endblock %}
 
+{% block breadcrumb %}
+   <div class="container" style="margin-top: 3em;">
+      <ol class="breadcrumb text">
+        <li class="breadcrumb-item"><a href="{% url 'main:index' %}">Главная</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="{% url 'main:task1' %}">Подборка площади сечения нулевого провода</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Результат</li>
+      </ol>
+   </div>
+{% endblock %}
+
 {% block content %}
-    <div class="container" style="margin-top: 10em;">
+    <div class="container" style="margin-top: 5em;">
         <h2 class="mb-3 text-center">Цель расчета</h2>
         <p class="text text-center" style="border: solid; border-color: blue; border-width: 0.1em; padding: 2em; border-radius: 100px;"><strong>Цель расчета зануления – определить сечение защитного нулевого провода,
             удовлетворяющее условию срабатывания максимальной токовой защиты, при известных
@@ -27,11 +37,17 @@
         </p>
         <h2 class="mb-3 text-center">Результат</h2>
         <div class="mb-5">
-            <p class="text text-center" style="border: solid; border-color: green; border-width: 0.1em; padding: 2em; border-radius: 100px;">
-                <strong>В результате расчета определена необходимая площадь сечения нулевого провода Sн = <u>{{ result2.square }}</u> мм 2
-                , которая обеспечит срабатывание автоматического выключателя.<strong>
-
-            </p>
+            {% if result2.square != -100 %}
+                <p class="text text-center" style="border: solid; border-color: green; border-width: 0.1em; padding: 2em; border-radius: 100px;">
+                    <strong>В результате расчета определена необходимая площадь сечения нулевого провода Sн = <u>{{ result2.square }}</u> мм 2
+                    , которая обеспечит срабатывание автоматического выключателя.<strong>
+                </p>
+            {% else %}
+                <p class="text text-center" style="border: solid; border-color: green; border-width: 0.1em; padding: 2em; border-radius: 100px;">
+                    <strong>В результате расчета определено, что при любой площади сечения нулевого провода
+                    ,обеспечено срабатывание автоматического выключателя не будет.<strong>
+                </p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
