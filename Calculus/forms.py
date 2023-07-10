@@ -1,6 +1,6 @@
 from django import forms
 from Calculus.models import Task1, ResultTask1, Task2, ResultTask2
-from Calculus.calculate_tasks.task1 import main
+from Calculus.calculate_tasks.task1 import TaskCalculus
 from Calculus.calculate_tasks.task2 import init_varibles
 
 
@@ -12,20 +12,20 @@ class Task1Form(forms.ModelForm):
 
     def save(self, commit=True):
         task1 = super().save(commit=True)
-        diameter, vertical_length, num_accurate, scheme, distance_between, section, length, depth, total_resistance, \
-            normative_resistance = main(task1.power, task1.soil, task1.climate_zone, task1.scheme)
+        result = TaskCalculus(task1.power, task1.climate_zone, task1.soil, task1.scheme)
+        diameter, length, number_of_vertical_conductors, scheme, distance_between, width, length_band, depth, resistance, normative_resistance = result()
 
         result1 = ResultTask1(
             task=task1,
             diameter=diameter,
-            vertical_length=vertical_length,
-            num_accurate=num_accurate,
+            vertical_length=length,
+            num_accurate=number_of_vertical_conductors,
             scheme=scheme,
             distance_between=distance_between,
-            section=section,
-            length=length,
+            section=width,
+            length=length_band,
             depth=depth,
-            total_resistance=total_resistance,
+            total_resistance=resistance,
             normative_resistance=normative_resistance,
         )
         result1.save()

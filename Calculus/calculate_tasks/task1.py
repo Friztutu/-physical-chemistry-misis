@@ -1,105 +1,104 @@
-"""
-Спроектировать защитное заземление оборудования лаборатории, находящейся в [climate_zone]
-климатической зоне. Заземляющее устройство заглублено на глубину [depth] м. Грунт – [soil].
-Для вертикальных заземлителей длиной lc = [vertical_length] м использовать стальные трубы диаметром
-d = [diameter] мм. Для соединительной полосы использовать стальную шину сечением [width] х 4 мм.
-Заземлители расположить в ряд. Источник тока (трансформатор) мощностью [power] кВ·А подает
-напряжение в лабораторию [voltage] В.
-"""
-
 import math
 
 
-# Определим нормативное значение сопротивления заземления Rн
-def main(power_db=400, soil_db=4, climate_zone_db='2', scheme_db=0):
-    soils = {1: 'чернозем', 2: 'супесок', 3: 'песок', 4: 'суглинок', 5: 'глина'}
-    schemes = {0: 'в ряд', 1: 'по контуру'}
-    depth = 0.8
-    vertical_length = 3.0
-    diameter = 40 / 1000
-    width = 40 / 1000
-    voltage = 400
-    power = power_db
-    soil = soils[soil_db]
-    climate_zone = str(climate_zone_db)
-    scheme = schemes[scheme_db]
-    return calculate(depth, vertical_length, diameter, width, voltage, power, soil, climate_zone, scheme)
+class TaskCalculus:
+    SOILS = {1: 'чернозем', 2: 'супесок', 3: 'песок', 4: 'суглинок', 5: 'глина'}
+    SCHEMES = {0: 'в ряд', 1: 'по контуру'}
 
+    SOILS_RESISTANCE = {'глина': 40, 'суглинок': 100, 'чернозем': 200, 'супесок': 300, 'песок': 700}
+    CLIMATE_ZONES_VERTICAL_ODDS = {1: (2.0, 7.0), 2: (1.8, 4.5), 3: (1.6, 2.5), 4: (1.4, 2.0)}
 
-def find_middle_value(quantity, grounding_multipliers):
-    quantities = sorted(list(grounding_multipliers.keys()) + [quantity])
-    current_index = quantities.index(quantity)
+    CONDUCTOR_USAGE_IN_A_ROW_ODDS = {2: 0.91, 4: 0.83, 6: 0.77, 10: 0.74, 20: 0.67}
+    CONDUCTOR_USAGE_BY_THE_CONTOUR_ODDS = {4: 0.85, 6: 0.8, 10: 0.76, 20: 0.71, 40: 0.66, 60: 0.64, 100: 0.62}
 
-    return grounding_multipliers[quantities[current_index - 1]] + (
-            grounding_multipliers[quantities[current_index + 1]]
-            - grounding_multipliers[
-                quantities[current_index - 1]]) / 2
+    def __init__(self, power: int, climate_zone: int, soil_index: int, scheme_index: int) -> None:
+        # User input
+        self.power: int = power
+        self.climate_zone: int = climate_zone
+        self.soil: str = self.SOILS[soil_index]
+        self.scheme: str = self.SCHEMES[scheme_index]
 
+        # Tasks variables
+        self.diameter = 0.03
+        self.length = 3
+        self.width = 0.04
+        self.normative_resistance = None
+        self.vertical_soil_resistance = None
+        self.horizontal_soil_resistance = None
+        self.resistance_single_vertical_conductor = None
+        self.num_vertical_conductors = None
+        self.distance_between = None
+        self.number_of_vertical_conductors = None
+        self.conductors_resistance = None
+        self.resistance_band = None
+        self.length_band = None
+        self.resistance = None
 
-def calculate(depth, vertical_length, diameter, width, voltage,  power, soil, climate_zone, scheme):
-    normative_resistance = 4 if power < 100 else 10
+    def step_one(self):
+        self.normative_resistance = 10 if self.power <= 100 else 4
 
-    soil_resistance_tabular = {"глина": 40, "суглинок": 100, "чернозем": 200,  # таблица 5.1
-                               "супесок": 300, "песок": 700, "скалистый": 2000}
+    def step_two(self):
+        vertical_odd = self.CLIMATE_ZONES_VERTICAL_ODDS[self.climate_zone][0]
+        horizontal_odd = self.CLIMATE_ZONES_VERTICAL_ODDS[self.climate_zone][1]
+        self.vertical_soil_resistance = self.SOILS_RESISTANCE[self.soil] * vertical_odd
+        self.horizontal_soil_resistance = self.SOILS_RESISTANCE[self.soil] * horizontal_odd
 
-    climate_multipliers = {"1": (2.0, 7.0), "2": (1.8, 4.5), "3": (1.6, 2.5), "4": (1.4, 2.0)}  # таблица 5.2
+    def step_three(self):
+        H = 0.8 + (self.length / 2)
+        first_multiplier = self.vertical_soil_resistance / (2 * 3.14 * 3)
+        second_multiplier = math.log((2 * self.length) / self.diameter) + 0.5 * math.log(
+            (4 * H + self.length) / (4 * H - self.length))
+        self.resistance_single_vertical_conductor = round(first_multiplier * second_multiplier, 2)
 
-    vertical_value = soil_resistance_tabular[soil] * climate_multipliers[climate_zone][0]  # pc расч
-    horizontal_value = soil_resistance_tabular[soil] * climate_multipliers[climate_zone][1]  # pп расч
+    def step_four(self):
+        self.num_vertical_conductors = round(self.resistance_single_vertical_conductor / self.normative_resistance)
 
-    # Определим сопротивление одиночного вертикального заземлителя с учетом удельного сопротивления грунта
+    def step_five(self):
+        if self.scheme == 'в ряд':
+            self.distance_between = self.length * 2
+            odd = round(0.9927 * math.pow(self.num_vertical_conductors,
+                                    -0.132) if self.num_vertical_conductors not in self.CONDUCTOR_USAGE_IN_A_ROW_ODDS else \
+            self.CONDUCTOR_USAGE_IN_A_ROW_ODDS[self.num_vertical_conductors], 2)
+        else:
+            self.distance_between = self.length * 3
+            odd = round(0.9585 * math.pow(self.num_vertical_conductors,
+                                    -0.098) if self.num_vertical_conductors not in self.CONDUCTOR_USAGE_BY_THE_CONTOUR_ODDS else \
+            self.CONDUCTOR_USAGE_BY_THE_CONTOUR_ODDS[self.num_vertical_conductors], 2)
 
-    h = depth + vertical_length / 2
+        self.number_of_vertical_conductors = math.ceil(self.num_vertical_conductors / odd)
+        self.conductors_resistance = round(
+            self.resistance_single_vertical_conductor / (self.number_of_vertical_conductors * odd), 2)
 
-    single_vertical_resistance = (vertical_value / (2 * math.pi * vertical_length)) * \
-                                 (math.log(2 * vertical_length / diameter) +
-                                  1 / 2 * math.log((4 * h + vertical_length) / (4 * h - vertical_length)))  # Rc
+    def step_six(self):
+        self.length_band = 1.05 * (self.number_of_vertical_conductors - 1) * self.distance_between
+        first_multiplier = self.horizontal_soil_resistance / (2 * 3.14 * self.length_band)
+        second_multiplier = math.log((2 * math.pow(self.length_band, 2)) / (0.8 * self.width))
+        self.resistance_band = round(first_multiplier * second_multiplier, 2)
 
-    # Учитывая норму сопротивления заземления Rн, определим число вертикальных
-    # заземлителей без учета взаимного экранирования
-    num_inaccurate = math.ceil(single_vertical_resistance / normative_resistance)
+        if self.scheme == 'в ряд':
+            odd = round(-0.0209 * self.number_of_vertical_conductors + 0.9718, 1)
+        else:
+            odd = round(0.9701 * math.pow(self.number_of_vertical_conductors, -0.242), 1)
 
-    # Определим конечное число вертикальных заземлителей и их сопротивление без учёта соединительной полосы
-    # При расположении в ряд η = 2, при расположении по контуру η = 3
+        self.resistance_band = round(self.resistance_band / odd)
 
-    if scheme == "в ряд":
-        vert_grounding_multipliers = {2: 0.91, 3: 0.86, 4: 0.83, 5: 0.8, 6: 0.77, 10: 0.74, 20: 0.67}  # таблица 5.3
-        eta = 2  # η
-    else:
-        vert_grounding_multipliers = {4: 0.85, 6: 0.80, 10: 0.76, 20: 0.71, 40: 0.66, 60: 0.64, 100: 0.62}
-        eta = 3
+        self.resistance = round(
+            (self.conductors_resistance * self.resistance_band) / (self.conductors_resistance + self.resistance_band),
+            2)
 
-    if num_inaccurate not in vert_grounding_multipliers:
-        vert_grounding_multipliers[num_inaccurate] = find_middle_value(num_inaccurate, vert_grounding_multipliers)
+    def answer(self):
+        return self.diameter * 1000, self.length, self.number_of_vertical_conductors, self.scheme, self.distance_between, self.width * 1000, self.length_band, 0.8, self.resistance, self.normative_resistance
 
-    num_accurate = math.ceil(num_inaccurate / vert_grounding_multipliers[num_inaccurate])  # n1 (также и n2)
-    grounding_resistance = single_vertical_resistance / \
-                           (num_accurate * vert_grounding_multipliers[num_inaccurate])  # Rcc
-
-    # Определим сопротивление соединительной полосы Rп:
-
-    horizontal_length = 1.05 * (num_accurate - 1) * eta * vertical_length  # lп
-    horizontal_resistance = horizontal_value / (2 * math.pi * horizontal_length) * \
-                            math.log(2 * horizontal_length ** 2 / (width * depth))  # Rп
-
-    # Произведём уточнение
-    if scheme == "в ряд":
-        horiz_grounding_multipliers = {2: 0.94, 4: 0.89, 6: 0.84, 8: 0.8, 10: 0.75, 20: 0.56}  # таблица 5.4
-    else:
-        horiz_grounding_multipliers = {4: 0.70, 6: 0.64, 10: 0.56, 20: 0.45, 40: 0.39, 60: 0.36, 100: 0.33}
-
-    # Дополним таблицу в случае необходимости
-    if num_accurate not in horiz_grounding_multipliers:
-        horiz_grounding_multipliers[num_accurate] = find_middle_value(num_accurate, horiz_grounding_multipliers)
-
-    horizontal_resistance = horizontal_resistance / horiz_grounding_multipliers[num_accurate]
-
-    total_resistance = round(grounding_resistance * horizontal_resistance /
-                             (grounding_resistance + horizontal_resistance), 2)
-
-    return diameter, vertical_length, num_accurate, scheme, vertical_length * eta, round(width * 1000), \
-        horizontal_length, depth, total_resistance, normative_resistance
+    def __call__(self, *args, **kwargs):
+        self.step_one()
+        self.step_two()
+        self.step_three()
+        self.step_four()
+        self.step_five()
+        self.step_six()
+        return self.answer()
 
 
 if __name__ == '__main__':
-    print(main(400, 4, '2', 0))
+    task1 = TaskCalculus(100, 3, 1, 0)
+    print(task1())
