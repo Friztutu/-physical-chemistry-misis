@@ -1,110 +1,141 @@
-"""
-Расчет зануления
-
-Цель расчета зануления – определить сечение защитного нулевого провода,
-удовлетворяющее условию срабатывания максимальной токовой защиты, при известных
-остальных параметрах сети и заданных параметрах автоматического выключателя или
-плавкой вставки.
-
-Подобрать площадь сечения нулевого провода, удовлетворяющая условию
-срабатывания максимальной токовой защиты, распределительного щитка лаборатории, к
-которому подведена линия (длиной l = 200 м) от понижающего трансформатора с 10 кВ до
-0,4 кВ, мощностью 400 кВ·А, соединение обмоток Y/Yн. Параметры «фазы» -- напряжение
-220 В, площадь сечения провода из меди 10 мм2. Расстояние между проводниками линии –
-0,6 м. Параметры устройства защиты – тип АВ, номинальный ток Iном = 63 А.
-"""
-
 import math
 
 
-# Определим сопротивление обмоток трансформатора Zт, Ом
-def init_varibles(scheme_id, power_key, phase_voltage_db, length_db, phase_square_db, phase_material_id,
-                  distance_between_conductors_db, amperage_nominal_db):
-    scheme_dict = {1: 'звезда-звезда', 2: 'не звезда-звезда'}
-    material_dict = {1: 'алюминий', 2: 'медь'}
-    powers = {1: 40, 2: 63, 3: 400, 4: 630}
+class Task2Calculus:
+    SCHEMES = {1: 'звезда-звезда', 2: 'не звезда-звезда'}
+    MATERIALS = {1: 'алюминий', 2: 'медь'}
+    POWERS = {1: 40, 2: 63, 3: 400, 4: 630}
 
-    scheme = scheme_dict[scheme_id]
-    power = powers[power_key]
-    phase_voltage = phase_voltage_db
-    length = length_db
-    phase_square = phase_square_db
-    phase_material = material_dict[phase_material_id]
-    distance_btwn_conductors = distance_between_conductors_db
-    amperage_nominal = amperage_nominal_db
-    return calculate(scheme, power, phase_voltage, length, phase_square, phase_material, distance_btwn_conductors, amperage_nominal)
+    RESISTANCES = {40: (1.950, 0.562), 63: (1.240, 0.360), 400: (0.195, 0.056), 630: (0.129, 0.042)}
+
+    In = {
+        0.5: {80: (5.24, 3.14), 120: (3.66, 2.2), 150: (3.38, 2.03), 160: (2.8, 1.68),
+              200: (2.28, 1.37), 250: (2.1, 1.26), 300: (1.77, 1.06)},
+        1: {80: (4.2, 2.52), 120: (2.91, 1.75), 150: (2.56, 1.54), 160: (2.24, 1.34),
+            200: (1.79, 1.07), 250: (1.60, 0.96), 300: (1.34, 0.8)},
+        1.5: {80: (3.48, 2.09), 120: (2.38, 1.43), 150: (2.08, 1.25), 160: (1.81, 1.09), 200: (1.45, 0.87),
+              250: (1.28, 0.77), 300: (1.08, 0.65)},
+        2: {80: (2.97, 1.78), 120: (2.04, 1.22), 150: (1.6, 0.98), 160: (1.54, 0.92), 200: (1.24, 0.74)}
+    }
+
+    def __init__(self, power_key: int, scheme_key: int, length: int, phase_material_id: int, phase_quantity: int,
+                 diameter: int, tok_power: int, type_electro):
+        # User input
+        self.power = self.POWERS[power_key]
+        self.scheme = self.SCHEMES[scheme_key]
+        self.length = length
+        self.material = self.MATERIALS[phase_material_id]
+        self.material_quantity = phase_quantity
+        self.diameter = diameter
+        self.tok_power = tok_power
+        self.voltage = 220
+        self.type_electro = type_electro
+
+        # Tasks variables
+        self.Z = None
+        self.tok = None
+        self.current_density = None
+        self.Ri = None
+        self.Xi = None
+        self.Rn = None
+        self.Xn = None
+        self.Rf = None
+        self.Zn = None
+        self.Zf = None
+        self.d = None
+        self.Xp = None
+        self.Zp = None
+        self.Ii = None
+        self.Ln = None
+
+    def step_one(self):
+        if self.scheme == 'звезда-звезда':
+            self.Z = self.RESISTANCES[self.power][0]
+        else:
+            self.Z = self.RESISTANCES[self.power][1]
+
+    def step_two(self):
+        if self.type_electro == 1 and self.tok_power < 100:
+            self.tok = round(self.tok_power * 1.4, 2)
+        elif self.type_electro == 1:
+            self.tok = round(self.tok_power * 1.25, 2)
+        else:
+            self.tok = round(self.tok_power * 3, 2)
+
+    def step_three(self, Ln):
+        self.current_density = self.tok / Ln
+
+        if self.current_density < 1:
+            self.current_density = 0.5
+        elif self.current_density < 1.5:
+            self.current_density = 1
+        else:
+            self.current_density = 1.5
+
+        self.Ri = self.In[self.current_density][Ln][0]
+        self.Xi = self.In[self.current_density][Ln][1]
+
+    def step_four(self):
+        self.Rn = round(self.Ri * (self.length / 1000), 3)
+        self.Xn = round(self.Xi * (self.length / 1000), 3)
+
+    def step_five(self):
+        if self.material == 'алюминий':
+            self.Rf = round((0.028 * self.length) / self.material_quantity, 3)
+        else:
+            self.Rf = round((0.018 * self.length) / self.material_quantity, 3)
+
+    def step_six(self):
+        self.Zn = round(math.sqrt(math.pow(self.Rn, 2) + math.pow(self.Xn, 2)), 3)
+        self.Zf = self.Rf
+
+    def step_seven(self):
+        return self.Zn <= 2 * self.Zf
+
+    def step_eight(self):
+        odd = self.material_quantity / 3.14
+        self.d = round(2 * math.sqrt(odd), 2)
+        self.Xp = round(0.1256 * (self.length / 1000) * math.log(2 * self.diameter / (self.d * 10 ** -6)), 3)
+
+    def step_nine(self):
+        self.Zp = round(math.sqrt(math.pow(self.Rf + self.Rn, 2) + math.pow(0 + self.Xn + self.Xp, 2)), 2)
+
+    def step_ten(self):
+        self.Ii = round(220 / (self.Z / 3 + self.Zp), 1)
+
+    def step_eleven(self):
+        return self.Ii >= self.tok
+
+    def __call__(self, *args, **kwargs):
+        keys = (80, 120, 150, 160, 200, 250, 300)
+
+        self.step_one()
+        self.step_two()
+
+        for self.Ln in keys:
+
+            self.step_three(self.Ln)
+            self.step_four()
+            self.step_five()
+            self.step_six()
+
+            if not self.step_seven():
+                if self.Ln == 300:
+                    return -1
+                continue
+
+            self.step_eight()
+            self.step_nine()
+            self.step_ten()
+
+            if self.step_eleven():
+                if self.Ln == 300:
+                    return -1
+                break
+
+        return self.Ln
 
 
-def calculate(scheme, power, phase_voltage, length, phase_square, phase_material, distance_btwn_conductors, amperage_nominal):
-    if scheme == "звезда-звезда":
-        resistance_table = {25: 3.110, 40: 1.950, 63: 1.240, 100: 0.800, 160: 0.487,
-                            250: 0.312, 400: 0.195, 630: 0.129, 1000: 0.081, 1600: 0.054}  # Таблица 5.6
-    else:
-        resistance_table = {25: 0.906, 40: 0.562, 63: 0.360, 100: 0.266, 160: 0.141,
-                            250: 0.090, 400: 0.056, 630: 0.042, 1000: 0.029, 1600: 0.017}
-
-    transformer_resistance = resistance_table[power] / 3 if 126 <= phase_voltage <= 130 else resistance_table[
-        power]  # Zт
-
-    coef = 1.4 if amperage_nominal < 100 else 1.25  # k
-    amperage_short = amperage_nominal * coef  # Iк
-
-    # Рассчитаем плотность тока в нулевом проводнике
-    # Найдем максимально и минимально возможные значения площади поперечного сечения
-    square_max = amperage_short / 0.5
-    square_min = amperage_short / 2
-
-    conductor_resistances = {80: {0.5: (5.24, 3.14), 1.0: (4.20, 2.52), 1.5: (3.48, 2.09), 2.0: (2.97, 1.78)},
-                             120: {0.5: (3.66, 2.20), 1.0: (2.91, 1.75), 1.5: (2.38, 1.43), 2.0: (2.04, 1.22)},
-                             150: {0.5: (3.38, 2.03), 1.0: (2.56, 1.54), 1.5: (2.08, 1.25), 2.0: (1.60, 0.98)},
-                             160: {0.5: (2.80, 1.68), 1.0: (2.24, 1.34), 1.5: (1.81, 1.09), 2.0: (1.54, 0.92)},
-                             200: {0.5: (2.28, 1.37), 1.0: (1.79, 1.07), 1.5: (1.45, 0.87), 2.0: (1.24, 0.74)},
-                             250: {0.5: (2.10, 1.26), 1.0: (1.60, 0.96), 1.5: (1.28, 0.77)},
-                             300: {0.5: (1.77, 1.06), 1.0: (1.34, 0.80), 1.5: (1.08, 0.65)}}  # Таблица 5.7
-
-    # Выберем площадь, входящую в найденный диапозон
-    for square in filter(lambda current_square: square_min <= current_square <= square_max, conductor_resistances):
-        # Выберем подходящую плотность тока
-        for amper_density in conductor_resistances[square]:  # iн
-            active_table_resistance = conductor_resistances[square][amper_density][0]  # r1
-            inductive_table_resistance = conductor_resistances[square][amper_density][1]  # x1
-
-            #   Определим значения активного и индуктивного сопротивления нулевого защитного
-            #   проводника
-            null_active_resistance = active_table_resistance * length / 1000  # Rн
-            null_inductive_resistance = inductive_table_resistance * length / 1000  # Xн
-
-            #   Для медных и алюминиевых проводников фаз по известным данным: сечению Sф (мм2),
-            #   длине l (м) и удельному сопротивлению проводника (Ом·мм2/м) (для меди = 0,018, а для
-            #   алюминия = 0,028) – опредеим активное сопротивление фазы Rф
-            resistivity = 0.018 if phase_material == "медь" else 0.028  # p
-
-            phase_active_resistance = resistivity * length / phase_square  # Rф
-
-            #   Значение внутреннего индуктивного фазного сопротивления Xф для медных и
-            #   алюминиевых проводников пренебрежимо мало
-
-            #   По формуле полного сопротивления проводников определим полное сопротивление
-            #   фазного Zф (Ом) и нулевого защитного проводника Zн (Ом)
-            total_null_resistance = (null_active_resistance ** 2 + null_inductive_resistance ** 2) ** 0.5  # Zн
-            total_phase_resistance = phase_active_resistance  # Zф
-
-            #   Тут должна быть проверка Zн <= 2 * Zф
-
-            #   Определим внешнее индуктивное сопротивление Xп, Ом, петли «фаза-нуль»
-            diameter = 2 * math.sqrt(phase_square / math.pi) / 10 ** 6
-            outer_inductive_resistance = 0.1256 * length / 1000 * \
-                                         math.log(2 * distance_btwn_conductors / diameter)  # Xп
-
-            #   Полное сопротивление проводников петли «фаза-нуль» Zп (Ом)
-            phase_null_resistance = math.sqrt((phase_active_resistance + null_active_resistance) ** 2 +
-                                              (0 + null_inductive_resistance + outer_inductive_resistance) ** 2)  # Zп
-
-            #   Расчетный ток петли «фаза-нуль»
-            phase_null_amperage = phase_voltage / (transformer_resistance / 3 + phase_null_resistance)
-
-            #   Проверка условия на срабатывание выключателя
-            if phase_null_amperage >= amperage_short:
-                return square
-
-    return -100
+if __name__ == '__main__':
+    task2 = Task2Calculus(2, 1, 250, 2, 15, 0.3, 40, 2)
+    print(task2())

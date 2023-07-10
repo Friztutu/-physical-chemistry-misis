@@ -80,7 +80,8 @@ class TaskCalculus:
         else:
             odd = round(0.9701 * math.pow(self.number_of_vertical_conductors, -0.242), 1)
 
-        self.resistance_band = round(self.resistance_band / odd)
+        if odd:
+            self.resistance_band = round(self.resistance_band / odd)
 
         self.resistance = round(
             (self.conductors_resistance * self.resistance_band) / (self.conductors_resistance + self.resistance_band),
