@@ -45,7 +45,8 @@ class Task1(models.Model):
     climate_zone = models.PositiveSmallIntegerField(choices=ZONES)
 
     def __str__(self):
-        return f'power: {self.power} | scheme: {self.get_scheme_display()} | soil: {self.get_soil_display()} | climate_zone: {self.get_climate_zone_display()}'
+        return f'power: {self.power} | scheme: {self.get_scheme_display()} | soil: {self.get_soil_display()} | ' \
+               f'climate_zone: {self.get_climate_zone_display()}'
 
     class Meta:
         verbose_name = 'First Task'

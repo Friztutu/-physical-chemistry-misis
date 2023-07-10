@@ -60,8 +60,6 @@ class Task2Form(forms.ModelForm):
             amperage_nominal_db=task2.amperage_nominal,
         )
 
-        print(square)
-
         result2 = ResultTask2(task=task2, square=square)
         result2.save()
         return task2
