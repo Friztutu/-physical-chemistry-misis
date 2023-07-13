@@ -24,6 +24,18 @@
     }
 }
 
+@media (min-width:  0px) and (max-width: 1000px){
+    .left {
+        display: none;
+    }
+}
+
+@media (min-width:  1001px) and (max-width: 10000px){
+    .right {
+        display: none;
+    }
+}
+
 @media (min-width:  0px) and (max-width: 650px){
     .margin-1 {
         margin-top: 1em!important;

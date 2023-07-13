@@ -30,7 +30,7 @@ class TaskTest(TestCase):
         task_v5 = Task2Calculus(4, 1, 100, 2, 20, 0.2, 125, 1)
 
         self.assertEqual(120, task_v1())
-        self.assertEqual(-1, task_v2())
+        self.assertEqual(-100, task_v2())
         self.assertEqual(300, task_v3())
         self.assertEqual(200, task_v4())
-        self.assertEqual(-1, task_v5())
+        self.assertEqual(-100, task_v5())

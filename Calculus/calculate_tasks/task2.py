@@ -121,7 +121,7 @@ class Task2Calculus:
 
             if not self.step_seven():
                 if self.Ln == 300:
-                    return -1
+                    return -100
                 continue
 
             self.step_eight()
@@ -130,7 +130,7 @@ class Task2Calculus:
 
             if self.step_eleven():
                 if self.Ln == 300:
-                    return -1
+                    return -100
                 break
 
         return self.Ln

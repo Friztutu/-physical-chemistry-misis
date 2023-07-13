@@ -16,11 +16,13 @@ from pathlib import Path
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool,),
-    SECRET_KEY=(str, ),
-    DATABASE_NAME=(str, ),
-    DATABASE_USER=(str, ),
-    DATABASE_PASSWORD=(str, ),
+    DEBUG=bool,
+    SECRET_KEY=str,
+    DATABASE_NAME=str,
+    DATABASE_USER=str,
+    DATABASE_PASSWORD=str,
+    DATABASE_HOST=str,
+    DATABASE_POSR=int,
 )
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +41,7 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
-
+#DOMAIN_NAME = env('DOMAIN_NAME')
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,10 +87,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Psy_Chem.wsgi.application'
 
+DOMAIN_NAME = env('DOMAIN_NAME')
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 if DEBUG:
     DATABASES = {
         'default': {
@@ -146,18 +149,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+else:
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# MEDIA FILES
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Default primary key field type
