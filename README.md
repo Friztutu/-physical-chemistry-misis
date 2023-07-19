@@ -67,7 +67,7 @@ python manage.py runserver
 ```
 
 
-## Разработчик:
+## Разработчики:
 
 - [Alex](https://github.com/Friztutu)
 - [Roman](https://github.com/ProtoFey)
