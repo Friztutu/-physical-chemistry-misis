@@ -69,7 +69,7 @@ python manage.py runserver
 
 ## Разработчики:
 
-- [Alex](https://github.com/Friztutu)
+- [Alex](https://github.com/Friztutu) Leed
 - [Roman](https://github.com/ProtoFey)
 
 ## License
